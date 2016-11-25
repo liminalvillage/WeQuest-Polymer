@@ -1,2 +1,4 @@
-
-truffle/build/*
+bower_components/
+build/
+niode_modules/
+truffle/build/
