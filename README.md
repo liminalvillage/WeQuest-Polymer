@@ -1,4 +1,6 @@
-# Polymer App Toolbox - Starter Kit
+WeQuest
+
+[![Gitter](https://badges.gitter.im/WeQuestIt/Lobby.svg)](https://gitter.im/WeQuestIt/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://travis-ci.org/PolymerElements/polymer-starter-kit.svg?branch=master)](https://travis-ci.org/PolymerElements/polymer-starter-kit)
 
