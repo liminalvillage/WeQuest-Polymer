@@ -8,5 +8,3 @@ Vagrantfile
 .gitattributes
 .github/ISSUE_TEMPLATE.md
 .travis.yml
-
-
