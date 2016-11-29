@@ -1,9 +1,9 @@
-bower_components/
-build/
-node_modules/
+bower_components/*
+build/*
+node_modules/*
 truffle/build/*
-.idea/
-.vscode/
+.idea/*
+.vscode/*
 Vagrantfile
 .gitattributes
 .github/ISSUE_TEMPLATE.md
