@@ -1,0 +1,17 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/we-app.html",
+  "fragments": [
+    "src/we-quest.html",
+    "src/we-404.html"
+  ],
+  "sourceGlobs": [
+   "src/**/*",
+   "images/**/*",
+   "bower.json"
+  ],
+  "includeDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
+}

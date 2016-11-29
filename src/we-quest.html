@@ -1,0 +1,76 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-swipeable-container/iron-swipeable-container.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="we-quest">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      iron-list {
+        flex: 1 1 auto;
+      }
+      .swipe {
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
+      }
+      .quest {
+        @apply(--layout-horizontal);
+        padding: 20px;
+        background-color: white;
+        border-bottom: 1px solid #888888;
+      }
+
+      .quest:focus {
+        outline: 0;
+        border-color: #333;
+      }
+    </style>
+          <iron-list items="[[quests]]" as="item">
+            <template>
+              <iron-swipeable-container>
+                <paper-card heading="Card title" class="quest" image="" elevation="0" animated-shadow="false">
+                    <div class="card-content">[[item.name]]</div>
+                    <div class="card-actions"></div>
+                  </paper-card>
+                </iron-swipeable-container>
+            </template>
+          </iron-list>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'we-quest',
+      properties: {
+        quests:{
+          type: Array,
+          value: [ 
+                {"title": "Bob"},
+                {"title": "Tim"},
+                {"title": "Mike"}
+              ]
+
+        }
+      }
+    });
+  </script>
+</dom-module>
