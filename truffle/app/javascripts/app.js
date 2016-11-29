@@ -11,6 +11,7 @@ function refresh() {
     wequest.nresources().then( function (value) {
       var element = document.getElementById("nresources");
       element.innerHTML = value.valueOf();
+      GetResource();
     }).catch(function(e) {
     console.log(e);
     setStatus("Error getting resources; see log.");
@@ -37,7 +38,8 @@ function GetResource() {
     wequest.nresources().then( function (res) {
 
             console.log(res);
-
+            var tmp = document.getElementById("output");
+            tmp.innerHTML = ""; //reset resources;
             if (res == 0){
                 console.log("No Resource!");
             }
@@ -47,23 +49,47 @@ function GetResource() {
 
             for (i = 1; i <= res; i++) {
                 var resource;
-                wequest.toAddress(i).then( function (address) {
+                wequest.toAddress(i).then( function (address ) {
                   resource = WeSource.at(address);
-                  resource.label().then(function (res){
-                    var label = web3.toAscii(res);
-                    console.log("Label: " + label);
+                  Promise.all([resource.label(), resource.nrequests()]).then(values => {
+                    //resource.label().then(function (){
+                    var label = web3.toAscii(values [0]);
+                    console.log("Label: " + label + " Num:" + values[1]);
                     var p = document.createElement("p");
                     p.setAttribute("id",label);
-                    //p.setAttribute("width",)
+                    p.setAttribute("style","width:"+values[1]+"%;background-color:green;");
+                    p.setAttribute("onclick","ListOrders(\'"+ address+"\')")
+                    p.setAttribute("href","javascript:void(0);");
                     p.innerHTML = label;
                     var tmp = document.getElementById("output");
                     tmp.appendChild(p);
                   });
-                  resource.nrequests().then(function (res){ console.log("Requests: " + res)});
+
                 });
             }
     });
 
+}
+
+function ListOrders(address){
+  var resource = WeSource.at(address);
+  var tmp = document.getElementById("orders");
+  tmp.innerHTML= "";
+  resource.nrequests().then( function (res ) {
+    for (i = 1; i <= res; i++) {
+    var button = document.createElement("button");
+    button.setAttribute("href","javascript:void(0);");
+    button.setAttribute("onclick","confirm(\'" + address + "\'," + i + ")");
+    button.innerHTML = i;
+    tmp.appendChild(button);
+    }
+
+  })
+}
+
+function confirm(address,id){
+  var res = WeSource.at(address);
+  res.confirm(id, {from:account, gas:1000000});
 }
 
 function Request(label, lat, lon) {
@@ -93,7 +119,7 @@ window.onload = function() {
     Request("pizza",20, 20, {from:account, gas:1000000});
     Request("pasta",10, 10, {from:account, gas:1000000});
 
-    GetResource();
+    //GetResource();
 
     //wequest.toAddress(1).then( function (f) {
   //    resource = WeSource.at(f);
