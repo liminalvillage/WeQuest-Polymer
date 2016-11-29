@@ -1,7 +1,7 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "WeQuest",
   "authors": [
-    "The Polymer Authors"
+    "The WeQuest Team"
   ],
   "private": true,
   "dependencies": {
