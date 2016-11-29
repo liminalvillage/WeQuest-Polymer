@@ -2,4 +2,11 @@ bower_components/
 build/
 node_modules/
 truffle/build/*
+.idea/
+.vscode/
+Vagrantfile
+.gitattributes
+.github/ISSUE_TEMPLATE.md
+.travis.yml
+
 
