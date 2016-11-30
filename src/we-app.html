@@ -22,6 +22,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="we-icons.html">
 
+<link rel="import" href="./we-wallet.html">
+<we-wallet
+  id="wewallet"
+  name="wallet"
+  account="{{account}}"
+  arcbalance="{{arcbalance}}"
+  balance="{{balance}}"
+  restamp>
+</we-wallet>
+
+
 <dom-module id="we-app">
   <template>
     <style>
@@ -74,7 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}"></app-route>
 
     <app-drawer-layout fullbleed>
-      <!-- Drawer content 
+      <!-- Drawer content
         <app-drawer>
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
@@ -98,8 +109,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="404"
             role="main">
-          <wq-quest name="quest"></wq-quest>
-          <wq-404 name="404"></wq-404>
+          <we-quest name="quest"></we-quest>
+          <we-404 name="404"></we-404>
         </iron-pages>
 
       </app-header-layout>
@@ -128,7 +139,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('wq-' + page + '.html');
+        var resolvedPageUrl = this.resolveUrl('we-' + page + '.html');
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
 
