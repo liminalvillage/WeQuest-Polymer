@@ -9,7 +9,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<<<<<<< HEAD
 <link rel="import" href="./we-helpers.html">
+=======
+>>>>>>> 71b208e765531eaea26fb388b522d125ecb0db90
 
 <script src="../bower_components/web3/dist/web3.min.js"></script>
 <script src="../bower_components/hooked-web3-provider/build/hooked-web3-provider.min.js"></script>
@@ -20,7 +23,11 @@ A polymer wrapper to web3js and lightwallet libraries to build blockchain apps i
 
 Example:
 
+<<<<<<< HEAD
     <we-web3wallet password="{{password}}" host="http://<yourRPCnode>:8545" account="{{account}}" web3="{{web3}}" keystore="{{keystore}}"></we-web3wallet>
+=======
+    <ac-web3wallet password="{{password}}" host="http://<yourRPCnode>:8545" account="{{account}}" web3="{{web3}}" keystore="{{keystore}}"></ac-web3wallet>
+>>>>>>> 71b208e765531eaea26fb388b522d125ecb0db90
 @demo
 -->
 <dom-module id="we-web3wallet">
@@ -32,7 +39,10 @@ Example:
       value="{{walletData}}"
       on-iron-localstorage-load-empty="initWallet"
       on-iron-localstorage-load="_loadWallet"></iron-localstorage>
+<<<<<<< HEAD
       <ac-helpers id="helpers"></ac-helpers>
+=======
+>>>>>>> 71b208e765531eaea26fb388b522d125ecb0db90
 </template>
 
 </dom-module>
