@@ -88,7 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <!-- <paper-icon-button icon="menu" drawer-toggle></paper-icon-button> -->
-            <paper-icon-button icon="menu"></paper-icon-button>
+            <!-- <paper-icon-button icon="menu"></paper-icon-button>-->
             <div main-title>WeQuest</div>
           </app-toolbar>
         </app-header>
@@ -98,10 +98,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="404"
             role="main">
-          <wq-quest name="quest"></wq-quest>
-          <wq-404 name="404"></wq-404>
+            <we-quest name="quest"></we-quest>
+            <we-404 name="404"></we-404>
         </iron-pages>
-
       </app-header-layout>
     </app-drawer-layout>
   </template>
@@ -128,7 +127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('wq-' + page + '.html');
+        var resolvedPageUrl = this.resolveUrl('we-' + page + '.html');
         this.importHref(resolvedPageUrl, null, this._showPage404, true);
       },
 

@@ -45,7 +45,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-color: #333;
       }
     </style>
-          <iron-list items="[[quests]]" as="item">
+           <iron-list items="[[quests]]" as="item">
             <template>
               <iron-swipeable-container>
                 <paper-card heading="Card title" class="quest" image="" elevation="0" animated-shadow="false">
@@ -68,9 +68,155 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 {"title": "Tim"},
                 {"title": "Mike"}
               ]
-
         }
+      },
+      attached: function(){
+       
+      },
+      ready: function() {
+        window.addEventListener('web3-ready', function(e){
+          this.web3 = e.detail.web3;
+          this.web3.eth.getAccounts(function(err, accs) {
+              if (err != null) {
+                alert("There was an error fetching your accounts.");
+                return;
+              }
+
+              if (accs.length == 0) {
+                alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
+                return;
+              }
+
+              accounts = accs;
+              account = accounts[0];
+
+              self.$.helpers.getfile('./contracts/WeQuest.json', function(err, contractjson) {
+                wequest = WeQuest.deployed();
+
+                Request("pizza",10, 1, {from:account, gas:1000000});
+                Request("pizza",20, 20, {from:account, gas:1000000});
+                Request("pasta",10, 10, {from:account, gas:1000000});
+
+              },
+              function(err, result) {
+                if (err !== null) {
+                  console.log(err);
+                  self.fire('log-event', {
+                    message: 'Error'
+                  });
+                  console.log('ERROR: Transaction didnt go through. See console.');
+                } else {
+                  console.log('NewOffer called on contract',contractjson.address);
+                  console.log('Transaction Successful!');
+                  self.fire('log-event', {
+                    message: 'escrowstart'
+                  });
+
+                  cb();
+
+                  console.log('Tx hash=', result);
+                }
+            })
+          })
+        });
+      },
+      _refreshQuestList: function() {
+          var self = this;
+          
+       /* self.$.helpers.getfile('./contracts/localsInOut.json', function(err, contractjson) {
+          console.log(err, contractjson);
+          self.web3.eth.getGasPrice(function(err, result) {
+            var gasPrice = result.toNumber(10);
+            self.hashtag = "0x88c80a97cc95015662124a2069e51c706cbf3e80";
+            var MyContract = self.web3.eth.contract(contractjson.abi);
+            var myContractInstance = MyContract.at(contractjson.address);
+            var account = self.$.helpers.fixaddress(window.account);
+            result = myContractInstance.newOffer.sendTransaction(self.hashtag, self.offeramount * 1e18, self.ipfshash, {
+                from: account,
+                gasPrice: gasPrice,
+                gasLimit: 400000,
+                gas: 400000,
+                data: contractjson.bytecode
+              },
+              function(err, result) {
+                if (err !== null) {
+                  console.log(err);
+                  self.fire('log-event', {
+                    message: 'Error'
+                  });
+                  console.log('ERROR: Transaction didnt go through. See console.');
+                } else {
+                  console.log('NewOffer called on contract',contractjson.address);
+                  console.log('Transaction Successful!');
+                  self.fire('log-event', {
+                    message: 'escrowstart'
+                  });
+
+                  cb();
+
+                  console.log('Tx hash=', result);
+                }
+
+                self.waitTx(result,function(){
+                  console.log('escrow created. Next step...');
+                  self.fire('log-event', {
+                    message: 'escrow created. Next step...'
+                  });
+                  var offeridx = myContractInstance.ipfstoid.call(self.ipfshash).toNumber();
+                  //cb(offeridx);
+                });
+
+
+              });
+          });
+        });*/
+      },
+       waitTx: function(txHash, callback) {
+        /*
+        * Watch for a particular transaction hash and call the awaiting function when done;
+        * Ether-pudding uses another method, with web3.eth.getTransaction(...) and checking the txHash;
+        * on https://github.com/ConsenSys/ether-pudding/blob/master/index.js
+        */
+        var self = this;
+        self.fire('log-event', {
+          message: 'Waiting on TX ' + txHash
+        });
+
+        var blockCounter = 15;
+        // Wait for tx to be finished
+        //debugger;
+        var filter = self.web3.eth.filter('latest').watch(function(err, blockHash) {
+          if (blockCounter <= 0) {
+            filter.stopWatching();
+            filter = null;
+            console.warn('!! Tx expired !!');
+            if (callback)
+            return callback(false);
+            else
+            return false;
+          }
+          // Get info about latest Ethereum block
+          var block = self.web3.eth.getBlock(blockHash);
+          console.log('block: ', block.number);
+
+          --blockCounter;
+          // Found tx hash?
+          if (block.transactions.indexOf(txHash) > -1) {
+            //debugger;
+            // Tx is finished
+            filter.stopWatching();
+            filter = null;
+            if (callback)
+            return callback(true);
+            else
+            return true;
+            // Tx hash not found yet?
+          } else {
+            // console.log('Waiting tx..', blockCounter);
+          }
+        }.bind(this));
       }
+
     });
   </script>
 </dom-module>

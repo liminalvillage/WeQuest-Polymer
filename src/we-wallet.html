@@ -1,0 +1,96 @@
+z<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-request.html">
+<link rel="import" href="./we-web3wallet.html">
+
+<link rel="import" href="./we-ipfs.html">
+<link rel="import" href="./we-password.html">
+<link rel="import" href="./we-ipfsupload.html">
+<link rel="import" href="./we-helpers.html">
+
+<link rel="import" href="./we-locationtracker.html">
+
+<dom-module id="we-wallet">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+    <style>
+      :host {
+        display: block;
+
+        padding: 16px;
+      }
+    </style>
+
+     <!-- faucet stuff -->
+    <we-helpers id="helpers"></we-helpers>
+
+    <we-web3wallet
+      id="web3wallet"
+      account="{{account}}"
+      password="{{password}}"
+      balance="{{balance}}"
+      keystore="{{keystore}}"
+      walletname="we-wallet"
+      host="{{web3host}}"
+      web3="{{web3}}"></we-web3wallet>
+
+    <we-config web3host="{{web3host}}"></ac-config>
+    <!-- <ac-password hidden password="{{password}}"></ac-password> -->
+
+    <we-ipfsupload hidefileinput hash="{{hash}}" url="{{imgurl}}" id="ipfsupload">
+      <img src="{{imgurl}}">
+    </we-ipfsupload>
+
+  </template>
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'we-wallet',
+      properties: {
+        account: {
+          type: String,
+          notify: true
+        },
+        password: {
+          type: String,
+          observer: '_password'
+        },
+        balance: {
+          type: Number,
+          notify: true
+        },
+        arcbalance: {
+          type: Number,
+          notify: true
+        },
+        web3: {
+          type: Object,
+          observer: '_web3',
+          notify: true
+        }
+      },
+
+      attached: function(){
+        this.password = sessionStorage.getItem('we-password');
+      },
+
+      _web3: function() {
+        //this._getARCbalance();
+        //this.fire('map-update');
+        //this.web3 = window.web3;
+      },
+
+      ready: function() {
+        //this.web3 = window.web3;
+        window.addEventListener('web3-ready', function() {
+          console.log('wallet knows web3?');
+          this.web3 = window.web3;
+        }.bind(this));
+      },
+
+      _password: function() {
+        console.log('Wallet: ',this.password);
+      }
+
+    });
+  </script>
+</dom-module>

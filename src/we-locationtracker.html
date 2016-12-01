@@ -1,0 +1,116 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/leaflet-map/leaflet-map.html">
+
+<dom-module id="we-locationtracker">
+  <template>
+    <leaflet-map hidden="true">
+      <leaflet-geolocation
+      watch
+      id="geolocator"
+      on-locationfound="_locationchanged"
+      enable-high-accuracy
+      latitude="{{latitude}}"
+      longitude="{{longitude}}"
+      maximumAge=100
+      accuracy="3"></leaflet-geolocation>
+    </leaflet-map>
+  </template>
+  <script>
+    Polymer({
+      is: 'we-locationtracker',
+      properties: {
+        oneShot: {
+          type: Boolean,
+          value: false
+        },
+        reverseGeocode: {
+          type: Boolean,
+          value: false
+        },
+        latitude: {
+          type: Number,
+          notify: true
+        },
+        longitude: {
+          type: Number,
+          notify: true
+        },
+        address: {
+          type: String,
+          notify: true
+        }
+      },
+
+      ready: function(){
+        // TODO : add if development then this set - othersie use other set.
+//        debugger;
+        if (this.oneShot){
+          this.$.geolocator.watch = false;
+        }
+      },
+
+      attached: function(){
+        console.log('we-locationtracker attached.');
+        //debugger;
+      },
+      detached: function(){
+        //debugger;
+        this.$.geolocator.container.stopLocate();
+        console.log('we-locationtracker ending. Bye.');
+      },
+
+      _locationchanged: function(e, data) {
+        if (!data){
+          return;
+        }
+        var self = this;
+        if (this.reverseGeocode) {
+          this.getAddress(data.latitude, data.longitude).then(function(response) {
+            try{
+              var r = JSON.parse(response);
+              self.address = r.display_name;
+            }catch(error){
+              return self.fire('error', error);
+            }
+          }, function(error) {
+            self.fire('error', error);
+          });
+        }
+        this.fire('locationChanged', data);
+      },
+
+      getAddress: function(lat, lng) {
+        var options = 'format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1';
+        var url = '//nominatim.openstreetmap.org/reverse?' + options;
+
+        // Return a new promise.
+        return new Promise(function(resolve, reject) {
+          // Do the usual XHR stuff
+          var req = new XMLHttpRequest();
+          req.open('GET', url);
+
+          req.onload = function() {
+            // This is called even on 404 etc
+            // so check the status
+            if (req.status == 200) {
+              // Resolve the promise with the response text
+              resolve(req.response);
+            } else {
+              // Otherwise reject with the status text
+              // which will hopefully be a meaningful error
+              reject(Error(req.statusText));
+            }
+          };
+          // Handle network errors
+          req.onerror = function() {
+            reject(Error("Network Error"));
+          };
+
+          // Make the request
+          req.send();
+        });
+      }
+
+    });
+  </script>
+</dom-module>
