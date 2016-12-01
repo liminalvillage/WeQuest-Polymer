@@ -8,10 +8,11 @@ function setStatus(message) {
 };
 
 function refresh() {
+
     wequest.nresources().then( function (value) {
       var element = document.getElementById("nresources");
       element.innerHTML = value.valueOf();
-      GetResource();
+      getResources();
     }).catch(function(e) {
     console.log(e);
     setStatus("Error getting resources; see log.");
@@ -20,11 +21,10 @@ function refresh() {
 
 
 function request() {
-
   var label = document.getElementById("label").value;
-  wequest.request(label,10,10, {from:account, gas:1000000}).then(function(value) {
+  wequest.request(label,"10","10", {from:account, gas:2100000}).then(function(value) {
     setStatus("Request completed!");
-    refresh();
+
   }).catch(function(e) {
     console.log(e);
     setStatus("Error sending request; see log.");
@@ -32,20 +32,16 @@ function request() {
 };
 
 
-function GetResource() {
-
-
+function getResources() {
+    var tmp = document.getElementById("output");
+    tmp.innerHTML = ""; //reset resources;
     wequest.nresources().then( function (res) {
-
             console.log(res);
-            var tmp = document.getElementById("output");
-            tmp.innerHTML = ""; //reset resources;
+
+
             if (res == 0){
                 console.log("No Resource!");
             }
-            var labels = [];
-            var nrequests = [];
-            nrequests.lenght = res;
 
             for (i = 1; i <= res; i++) {
                 var resource;
@@ -58,7 +54,7 @@ function GetResource() {
                     var p = document.createElement("p");
                     p.setAttribute("id",label);
                     p.setAttribute("style","width:"+values[1]+"%;background-color:green;");
-                    p.setAttribute("onclick","ListOrders(\'"+ address+"\')")
+                    p.setAttribute("onclick","listOrders(\'"+ address+"\')")
                     p.setAttribute("href","javascript:void(0);");
                     p.innerHTML = label;
                     var tmp = document.getElementById("output");
@@ -71,15 +67,40 @@ function GetResource() {
 
 }
 
-function ListOrders(address){
+function orderDetails(address, id){
+  var resource = WeSource.at(address);
+  var tmp = document.getElementById("details");
+  tmp.innerHTML= "";
+  resource.getRequestInfo( id ).then(
+    function (res )
+    {
+      var p = document.createElement("p");
+      //button.setAttribute("onclick","confirm(\'" + address + "\'," + i + ")");
+      p.innerHTML = "Status: " +  res[4] + " Loc: " + res[2] + " "  + res[3];
+      tmp.appendChild(p);
+      var button = document.createElement("button");
+      button.setAttribute("href","javascript:void(0);");
+      button.setAttribute("onclick","confirm(\'" + address + "\'," + id + ")");
+      button.innerHTML = "Confirm";
+      tmp.appendChild(button);
+      var subscribebutton = document.createElement("button");
+      subscribebutton.setAttribute("href","javascript:void(0);");
+      subscribebutton.setAttribute("onclick","subscribe(\'" + address + "\')");
+      subscribebutton.innerHTML = "Subscribe";
+      tmp.appendChild(subscribebutton);
+    }
+  )
+}
+
+function listOrders(address){
   var resource = WeSource.at(address);
   var tmp = document.getElementById("orders");
   tmp.innerHTML= "";
   resource.nrequests().then( function (res ) {
-    for (i = 1; i <= res; i++) {
+    for (i = 0; i < res; i++) {
     var button = document.createElement("button");
     button.setAttribute("href","javascript:void(0);");
-    button.setAttribute("onclick","confirm(\'" + address + "\'," + i + ")");
+    button.setAttribute("onclick","orderDetails(\'" + address + "\'," + i + ")");
     button.innerHTML = i;
     tmp.appendChild(button);
     }
@@ -89,14 +110,22 @@ function ListOrders(address){
 
 function confirm(address,id){
   var res = WeSource.at(address);
-  res.confirm(id, {from:account, gas:1000000});
+  res.confirm(id, {from:account, gas:2100000});
+  orderDetails( address, id );
 }
 
-function Request(label, lat, lon) {
-    var res = wequest.request(label, lat, lon, {from:account, gas:1000000});
-    console.log("Request complete! - " + res);
-}
 
+function subscribe( address ){
+    var res = WeSource.at(address);
+    var event = res.NewRequest();
+    event.watch(function(error, result){
+    // result will contain various information
+    // including the argumets given to the Deposit
+    // call.
+    if (!error)
+        alert(JSON.stringify(result));
+    });
+}
 
 window.onload = function() {
   web3.eth.getAccounts(function(err, accs) {
@@ -115,17 +144,10 @@ window.onload = function() {
 
     wequest = WeQuest.deployed();
 
-    Request("pizza",10, 1, {from:account, gas:1000000});
-    Request("pizza",20, 20, {from:account, gas:1000000});
-    Request("pasta",10, 10, {from:account, gas:1000000});
 
-    //GetResource();
-
-    //wequest.toAddress(1).then( function (f) {
-  //    resource = WeSource.at(f);
-    //  resource.label().then(console.log);
-      //resource.nresources().then(console.log);
-    //});
+    request("pizza","10", "1", {from:account, gas:2100000});
+    request("pizza","20", "20", {from:account, gas:2100000});
+    request("pasta","10", "10", {from:account, gas:2100000});
 
     refresh();
   });

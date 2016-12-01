@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity ^0.4.6;
 
 import "mortal.sol";
 
@@ -30,9 +30,9 @@ contract WeSource is mortal
 
     function request(string lat, string lon)
     {
-
-        requests.push(Request (msg.sender, 1 , lat, lon, 0 , now));
+        var order = Request (msg.sender, 1 , lat, lon, 0 , now);
         nrequests += 1;
+        requests.push(order);
         //Notify listeners
         NewRequest(label,lat,lon);
     }
@@ -47,6 +47,30 @@ contract WeSource is mortal
       //WARNING: whatif someone sends a tender result for the same item at the same time is replaced?
       delete requests[nrequests]; //delete last item
       nrequests -= 1;
+    }
+
+    function getRequestInfo(uint id ) public constant returns (
+      address requester,
+      uint8 amounts,
+      string lat,
+      string lon,
+      uint status,
+      uint creation
+    ){
+      Request order = requests[ id ];
+      requester = order.requester;
+      amounts = order.amounts;
+      lat = order.lat;
+      lon = order.lon;
+      status = order.status;
+      creation = order.creation;
+
+    }
+
+    function getStatus(uint id)  constant returns (uint status) {
+      Request order = requests[id];
+      status = order.status;
+      return;
     }
 
     function confirm(uint id)
