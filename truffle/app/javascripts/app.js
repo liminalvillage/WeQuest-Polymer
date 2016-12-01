@@ -24,7 +24,7 @@ function request() {
   var label = document.getElementById("label").value;
   wequest.request(label,"10","10", {from:account, gas:2100000}).then(function(value) {
     setStatus("Request completed!");
-
+    refresh();
   }).catch(function(e) {
     console.log(e);
     setStatus("Error sending request; see log.");
@@ -145,9 +145,9 @@ window.onload = function() {
     wequest = WeQuest.deployed();
 
 
-    request("pizza","10", "1", {from:account, gas:2100000});
-    request("pizza","20", "20", {from:account, gas:2100000});
-    request("pasta","10", "10", {from:account, gas:2100000});
+    wequest.request("pasta","10","10", {from:account, gas:2100000})
+    wequest.request("pizza","120","120", {from:account, gas:2100000})
+    wequest.request("pizza","130","130", {from:account, gas:2100000})
 
     refresh();
   });
