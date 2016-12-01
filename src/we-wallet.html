@@ -1,16 +1,12 @@
 z<link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-request.html">
 <link rel="import" href="./we-web3wallet.html">
-
-<<<<<<< HEAD
 <link rel="import" href="./we-ipfs.html">
 <link rel="import" href="./we-password.html">
 <link rel="import" href="./we-ipfsupload.html">
 <link rel="import" href="./we-helpers.html">
 
 <link rel="import" href="./we-locationtracker.html">
-=======
->>>>>>> 71b208e765531eaea26fb388b522d125ecb0db90
 
 <dom-module id="we-wallet">
   <!-- Defines the element's style and local DOM -->
@@ -22,13 +18,8 @@ z<link rel="import" href="../bower_components/polymer/polymer.html">
         padding: 16px;
       }
     </style>
-
-<<<<<<< HEAD
      <!-- faucet stuff -->
     <we-helpers id="helpers"></we-helpers>
-
-=======
->>>>>>> 71b208e765531eaea26fb388b522d125ecb0db90
     <we-web3wallet
       id="web3wallet"
       account="{{account}}"
@@ -39,19 +30,12 @@ z<link rel="import" href="../bower_components/polymer/polymer.html">
       host="{{web3host}}"
       web3="{{web3}}"></we-web3wallet>
 
-<<<<<<< HEAD
-    <we-config web3host="{{web3host}}"></ac-config>
     <!-- <ac-password hidden password="{{password}}"></ac-password> -->
 
     <we-ipfsupload hidefileinput hash="{{hash}}" url="{{imgurl}}" id="ipfsupload">
       <img src="{{imgurl}}">
     </we-ipfsupload>
-
-=======
     <we-config web3host="{{web3host}}"></we-config>
-    <!-- <ac-password hidden password="{{password}}"></ac-password> -->
-
->>>>>>> 71b208e765531eaea26fb388b522d125ecb0db90
   </template>
   <!-- Creates the element's prototype and registers it -->
   <script>
@@ -100,11 +84,7 @@ z<link rel="import" href="../bower_components/polymer/polymer.html">
       },
 
       _password: function() {
-<<<<<<< HEAD
-        console.log('Wallet: ',this.password);
-=======
         //console.log('Wallet: ',this.password);
->>>>>>> 71b208e765531eaea26fb388b522d125ecb0db90
       }
 
     });
