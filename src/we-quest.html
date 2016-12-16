@@ -45,14 +45,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-color: #333;
       }
     </style>
+          <we-wallet
+            id="wewallet"
+            name="wallet"
+            account="{{account}}"
+            arcbalance="{{arcbalance}}"
+            balance="{{balance}}"
+            restamp>
+          </we-wallet>
            <iron-list items="[[quests]]" as="item">
             <template>
-              <iron-swipeable-container>
                 <paper-card heading="Card title" class="quest" image="" elevation="0" animated-shadow="false">
                     <div class="card-content">[[item.name]]</div>
                     <div class="card-actions"></div>
                   </paper-card>
-                </iron-swipeable-container>
             </template>
           </iron-list>
   </template>
@@ -63,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         quests:{
           type: Array,
-          value: [ 
+          value: [
                 {"title": "Bob"},
                 {"title": "Tim"},
                 {"title": "Mike"}
@@ -71,7 +77,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
       attached: function(){
-       
+
       },
       ready: function() {
         window.addEventListener('web3-ready', function(e){
@@ -122,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       _refreshQuestList: function() {
           var self = this;
-          
+
        /* self.$.helpers.getfile('./contracts/localsInOut.json', function(err, contractjson) {
           console.log(err, contractjson);
           self.web3.eth.getGasPrice(function(err, result) {

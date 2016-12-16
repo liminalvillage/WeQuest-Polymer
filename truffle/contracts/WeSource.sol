@@ -13,6 +13,7 @@ contract WeSource is mortal
         string lon;
         uint status;
         uint creation;
+        string IPFSMeta;
     }
 
     Request[] public requests;
@@ -78,6 +79,10 @@ contract WeSource is mortal
         Request order = requests[id];
         order.status = 2; //Status.completed;
         //Transfer agreed amount from requester to supplier
+        //time.balanceOf[msg.sender] += order.amounts;
+        //time.balanceOf[order.requester] -= order.amounts;
+        //we.balanceOf[msg.sender ] += nrequest; //ADD current demand as tokens
+        //ewe.balanceOf[order.requester] -= nrequests;
         //remove request from active list
 
     }

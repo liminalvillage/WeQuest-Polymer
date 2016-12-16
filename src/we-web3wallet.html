@@ -155,11 +155,11 @@ Example:
     },
 
     // HIER TOKEN BALANCE OPVRAGEN EN TONEN
-    _getARCbalance: function() {
+    _getTokenBalance: function() {
       var self = this;
       if(!self.web3) { return; }
 
-      this.contracturl = this.resolveUrl('./contracts/ARCToken.json');
+      this.contracturl = this.resolveUrl('./contracts/WEToken.json');
 
       this.importHref(this.contracturl, function(e) {
         var contractjson = JSON.parse(e.target.import.body.innerText);
@@ -206,12 +206,12 @@ Example:
 
       this.updateBalance();
 
-      this._getARCbalance();
+      this._getTokenBalance();
 
       this.fire('web3-ready',{web3:web3});
 
       window.setInterval(function() {
-        this._getARCbalance();
+        this._getTokenBalance();
       }.bind(this), 30000);
     }
 
