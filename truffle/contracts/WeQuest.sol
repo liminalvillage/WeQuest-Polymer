@@ -1,7 +1,7 @@
 pragma solidity ^0.4.2;
 
-import "mortal.sol";
-import "WeSource.sol";
+import "./mortal.sol";
+import "./WeSource.sol";
 
 contract WeQuest is mortal
 {
